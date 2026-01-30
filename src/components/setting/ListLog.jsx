@@ -2,7 +2,7 @@ import React from 'react'
 import { BoxAllSide } from '../BaseBox'
 import Table from '../table/Table'
 
-export default function ListSniffer() {
+export default function ListLog() {
     const columns = [
         { key: "no", label: "No" },
         { key: "task", label: "Taks Name" },

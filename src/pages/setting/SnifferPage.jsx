@@ -5,13 +5,14 @@ import Button from '../../components/Button'
 import ScanningProgress from '../../components/setting/ScanningProgress'
 import ListSniffer from '../../components/setting/ListSniffer'
 import iconApply from '../../assets/ic_apply.svg'
+import { FaPlay } from 'react-icons/fa'
 
 export default function SnifferPage() {
     return (
         <SettingWrapper title={"Sniffer"}>
-            <div className="flex items-center justify-center min-h-[80vh]">
+            <div className="flex items-center justify-center mt-5">
                 <div
-                    className='w-3/4 min-h-[70vh] max-h-[70vh] border border-[#174828] p-5 flex flex-col'
+                    className='w-3/4 border border-[#174828] p-5 flex flex-col'
                     style={{
                         background: "linear-gradient(180deg, rgba(27, 54, 36, 0.2) 0%, rgba(11, 36, 20, 0.2) 100.86%)"
                     }}
@@ -19,7 +20,7 @@ export default function SnifferPage() {
                     <div className='flex justify-between items-center gap-5'>
                         <Text size='17px'>SNIFFER</Text>
                         <ScanningProgress progress={50} />
-                        <Button className='whitespace-nowrap'>Start Scan</Button>
+                        <Button className='whitespace-nowrap' icon={<FaPlay/>}>Start Scan</Button>
                     </div>
 
                     <div className='flex-1 mt-4 pr-2'>
@@ -35,7 +36,6 @@ export default function SnifferPage() {
                     </div>
                 </div>
             </div>
-
         </SettingWrapper>
     )
 }

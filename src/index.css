@@ -67,3 +67,13 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+/* HANYA time */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Firefox – time only */
+input[type="time"] {
+  -moz-appearance: textfield;
+}

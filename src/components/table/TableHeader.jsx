@@ -1,9 +1,12 @@
 import TableRow from "./TableRow"
 import TableHead from "./TableHead"
 
-export default function TableHeader({ columns, bg = "#08682A"}) {
+export default function TableHeader({ columns, bg = "#08682A" }) {
     return (
-        <thead className={`bg-[${bg}]`}>
+        <thead
+            className={`overflow-hidden`}
+            style={{ backgroundColor: bg }}
+        >
             <TableRow>
                 {columns.map((col) => (
                     <TableHead

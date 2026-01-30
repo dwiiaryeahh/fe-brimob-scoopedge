@@ -1,9 +1,7 @@
-import React from 'react'
-import { BoxAllSide } from '../BaseBox'
 import Table from '../table/Table'
 import Button from '../Button';
-
 export default function ListCampaign() {
+
     const columns = [
         { key: "no", label: "No" },
         { key: "imsi", label: "Imsi" },
@@ -21,7 +19,7 @@ export default function ListCampaign() {
                     className='bg-[#0C8736]'
                     onClick={(e) => {
                         e.stopPropagation();
-                        alert(`Action for ${row.name}`);
+                        alert(`Action for ${row.imsi}`);
                     }}>
                     Target
                 </Button>
@@ -36,7 +34,7 @@ export default function ListCampaign() {
 
     return (
         <div className="flex flex-col w-full gap-4 font-sora min-h-[54vh] max-h-[54vh] overflow-auto">
-            <div className='flex items-center mt-1.5 mb-1.5'>
+            <div className='flex justify-between items-center mt-1.5 mb-1.5'>
                 <h3 className="text-xl font-bold text-white/90">IMSI Total (834)</h3>
             </div>
             <div className=''>

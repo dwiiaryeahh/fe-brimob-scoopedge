@@ -10,6 +10,7 @@ import {
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import BaseCard from '../BaseCard'
+import Text from '../Text'
 
 ChartJS.register(
     CategoryScale,
@@ -43,8 +44,8 @@ export default function ChartStats() {
 
     return (
         <BaseCard.Form>
-            <div className="h-[216px] p-2">
-                <h1 className="mb-2 -mt-5 font-">Last Activity</h1>
+            <div className="-mt-5 h-56 p-2 pb-5 flex flex-col gap-2 mb-2">
+                <Text size='16px'>Last Activity</Text>
                 <Bar data={data} options={options} />
             </div>
         </BaseCard.Form>

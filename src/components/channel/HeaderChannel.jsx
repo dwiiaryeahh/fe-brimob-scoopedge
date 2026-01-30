@@ -1,12 +1,14 @@
 import React from 'react'
 import iconSniffer from '../../assets/ic_sniffer.svg'
 import iconDevice from '../../assets/ic_device.svg'
+import { useNavigate } from 'react-router-dom'
 
 export default function HeaderChannel({data}) {
+    const navigate = useNavigate()
     return (
         <div className='flex w-full bg-[#07772E]'>
             <div className='flex-1 p-2'>
-                <div className='flex flex-row gap-2'>
+                <div onClick={()=> navigate('/setting/sniffer')} className='flex flex-row gap-2 cursor-pointer'>
                     <img src={iconSniffer} alt="" />
                     <p>Sniffer</p>
                 </div>
@@ -33,12 +35,12 @@ export default function HeaderChannel({data}) {
                     clipPath: 'polygon(0 0, 100% 0, 100% 100%, 15% 100%)'
                 }}>
                 <div className='flex flex-row gap-3 justify-end'>
-                    <div className='flex flex-row gap-2'>
+                    <div onClick={()=> navigate('/setting/distance')} className='flex flex-row gap-2 cursor-pointer'>
                         <img src={iconDevice} alt="" />
                         <p>RX TX Setting</p>
                     </div>
-                    <div className='flex flex-row gap-2'>
-                        <img src={iconDevice} alt="" />
+                    <div className='flex flex-row gap-2 cursor-pointer'>
+                        <img onClick={()=> navigate('/setting/channel')} src={iconDevice} alt="" />
                         <p>Device Status</p>
                     </div>
                 </div>

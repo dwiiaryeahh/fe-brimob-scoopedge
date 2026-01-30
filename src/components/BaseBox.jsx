@@ -18,7 +18,7 @@ function BaseCutBox({
   contentPaddingTop, // default = contentPadding
 
   innerShadow = '', // ⬅️ TAMBAH INI
-
+  ...props
 }) {
   const ref = useRef(null)
   const [size, setSize] = useState({ w: 0, h: 0 })
@@ -50,7 +50,7 @@ function BaseCutBox({
   const padTop = contentPaddingTop ?? contentPadding
 
   return (
-    <div ref={ref} className={`relative w-full ${className}`}>
+    <div ref={ref} className={`relative w-full ${className}`} {...props}>
       {/* BORDER (SVG) */}
       <svg
         className="absolute inset-0 pointer-events-none z-10"
@@ -93,7 +93,7 @@ function getPathByType(w, h, c, type, extra = {}) {
   if (!w || !h) return 'M0,0 H1 V1 H0 Z'
   const { borderW = 1.5 } = extra
   const offset = borderW / 2
-  
+
   const o = 0.6 + offset  // ⬅️ Tambahkan offset
   const cut = Math.max(0, c * 0.6) + offset
 
