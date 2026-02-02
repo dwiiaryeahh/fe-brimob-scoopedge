@@ -23,12 +23,23 @@ ChartJS.register(
 
 export default function ChartStats() {
     const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun',],
         datasets: [
             {
-                data: [12, 19, 3, 5, 8],
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                label: 'Blacklist',
+                data: [5800, 5000, 1800, 5400, 2500],
+                backgroundColor: 'rgba(0, 0, 0, 1)', // hitam
+                barPercentage: 0.3,
+                categoryPercentage: 0.6,
             },
+            {
+                label: 'Whitelist',
+                data: [2000, 300, 7200, 2000, 500],
+                backgroundColor: 'rgba(43, 255, 117, 1)', // green terang
+                barPercentage: 0.3,
+                categoryPercentage: 0.6,
+            },
+            
         ],
     }
 
@@ -40,6 +51,38 @@ export default function ChartStats() {
                 display: false,
             },
         },
+        scales: {
+            x: {
+                stacked: true,
+                grid: {
+                    display: false,
+                },
+                ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    font: {
+                        size: 10,
+                        weight: 'bold',
+                    },
+                },
+            },
+            y: {
+                stacked: true,
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.3)',
+                    borderDash: [5, 5],
+                    drawBorder: false,
+                },
+                border: {
+                    display: false,
+                },
+                ticks: {
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    callback: function(value) {
+                        return value >= 1000 ? (value / 1000) + 'k' : value;
+                    },
+                },
+            },
+        },
     }
 
     return (
@@ -49,6 +92,5 @@ export default function ChartStats() {
                 <Bar data={data} options={options} />
             </div>
         </BaseCard.Form>
-
     )
 }

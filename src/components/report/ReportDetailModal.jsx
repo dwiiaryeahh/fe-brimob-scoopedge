@@ -3,10 +3,9 @@ import Modal from '../Modal'
 import Text from '../Text';
 import BaseCard from '../BaseCard';
 import ListDetailReport from './ListDetailReport';
-import iconExport from '../../assets/ic_export.svg'
-import iconImport from '../../assets/ic_import.svg'
 import Input from '../Input';
 import { FaClock, FaRegClock, FaSearch } from 'react-icons/fa';
+import { BsFiletypePdf, BsFiletypeXls } from 'react-icons/bs';
 
 const Item = ({ children }) => {
     return (
@@ -54,7 +53,7 @@ export default function ReportDetailModal({ title, isOpen, onClose, data }) {
                     <div className='flex flex-row max-w-full justify-between items-center gap-5'>
                         <Item>
                             <Text size='14px'>Start</Text>
-                            <div style={{backgroundColor:"rgba(18, 211, 252, 0.04)"}} className='border border-[#00F25D] py-2 px-3'>
+                            <div style={{ backgroundColor: "rgba(18, 211, 252, 0.04)" }} className='border border-[#00F25D] py-2 px-3'>
                                 <Text align='center'>
                                     {data.start_time}
                                 </Text>
@@ -62,7 +61,7 @@ export default function ReportDetailModal({ title, isOpen, onClose, data }) {
                         </Item>
                         <Item>
                             <Text size='14px'>Stop</Text>
-                            <div style={{backgroundColor:"rgba(18, 211, 252, 0.04)"}} className='border border-[#00F25D] py-2 px-3'>
+                            <div style={{ backgroundColor: "rgba(18, 211, 252, 0.04)" }} className='border border-[#00F25D] py-2 px-3'>
                                 <Text align='center' className=''>
                                     {data.stop_time}
                                 </Text>
@@ -71,7 +70,7 @@ export default function ReportDetailModal({ title, isOpen, onClose, data }) {
                     </div>
                     <Item>
                         <Text size='14px'>IMSI Detected</Text>
-                        <div style={{backgroundColor:"rgba(18, 211, 252, 0.04)"}} className='border border-[#00F25D] py-2 px-3 w-24.5'>
+                        <div style={{ backgroundColor: "rgba(18, 211, 252, 0.04)" }} className='border border-[#00F25D] py-2 px-3 w-24.5'>
                             <Text align='right'>
                                 {data.imsi_count}
                             </Text>
@@ -79,7 +78,7 @@ export default function ReportDetailModal({ title, isOpen, onClose, data }) {
                     </Item>
                     <Item>
                         <Text size='14px'>Alert</Text>
-                        <div style={{backgroundColor:"rgba(18, 211, 252, 0.04)"}} className='border border-[#00F25D] py-2 px-3 w-24.5'>
+                        <div style={{ backgroundColor: "rgba(18, 211, 252, 0.04)" }} className='border border-[#00F25D] py-2 px-3 w-24.5'>
                             <Text align='right'>
                                 {data.alert_count}
                             </Text>
@@ -91,16 +90,19 @@ export default function ReportDetailModal({ title, isOpen, onClose, data }) {
                         <div className='gap-3 flex flex-col'>
                             <div className='flex flex-row justify-between gap-3'>
                                 <div className='relative'>
-                                    <Input className='rounded-sm' placeholder={`Search`} onChange={""} />
+                                    <Input
+                                        className="rounded-sm bg-linear-to-t from-[#043516] to-[#0F5028] w-full"
+                                        placeholder="Search"
+                                    />
                                 </div>
                                 <div className='inline-flex gap-5'>
-                                    <button className='flex gap-3 items-center cursor-pointer'>
-                                        <img src={iconExport} />
-                                        <Text>EXPORT</Text>
+                                    <button className='flex gap-2 items-center cursor-pointer'>
+                                        <BsFiletypeXls color='#CA7A02' />
+                                        <Text>EXPORT XLS</Text>
                                     </button>
-                                    <button className='flex gap-3 items-center cursor-pointer'>
-                                        <img src={iconImport} />
-                                        <Text>EXPORT</Text>
+                                    <button className='flex gap-2 items-center cursor-pointer'>
+                                        <BsFiletypePdf color='#01D754' />
+                                        <Text>EXPORT PDF</Text>
                                     </button>
                                 </div>
                             </div>

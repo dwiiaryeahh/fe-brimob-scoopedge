@@ -69,6 +69,7 @@ export default function GroupChannel() {
                             />
                         ))}
                     </div>
+                    <div className='absolute w-1/2 -bottom-[1.5px] border border-[#20E766] -translate-x-1/2 left-1/2'></div>
                 </div>
             </div>
         </>

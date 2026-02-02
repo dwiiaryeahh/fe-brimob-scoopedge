@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { BoxAllSide } from '../BaseBox'
 import Table from '../table/Table'
 import AddTargetModal from './AddTargetModal'
+import ImportTargetModal from './ImportTargetModal'
 import Button from '../Button'
 
-const ButtonAddNew = ({ onClick }) => {
+const ButtonCustom = ({ onClick, label }) => {
     return (
         <BoxAllSide
             cut={14}
@@ -16,15 +17,17 @@ const ButtonAddNew = ({ onClick }) => {
             onClick={onClick}
         >
             <span className="text-white font-semibold text-sm select-none mx-5 my-10 font-oxanium">
-                Add New
+                {label}
             </span>
         </BoxAllSide>
     )
 }
 
 export default function ListTarget() {
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isModalAddOpen, setIsModalAddOpen] = useState(false)
+    const [isModalImportOpen, setIsModalImportOpen] = useState(false)
     const [selectedTarget, setSelectedTarget] = useState(null)
+    console.log('selectedTarget', selectedTarget)
 
     const columns = [
         { key: "no", label: "No" },
@@ -36,7 +39,7 @@ export default function ListTarget() {
                     onClick={(e) => {
                         e.stopPropagation()
                         setSelectedTarget(row)
-                        setIsModalOpen(true)
+                        setIsModalAddOpen(true)
                     }}
                 >
                     {row.name}
@@ -45,14 +48,14 @@ export default function ListTarget() {
         },
         { key: "imsi", label: "Imsi" },
         { key: "date", label: "Last Update" },
-        { key: "count", label: "Count" },
-        { key: "status", label: "Status" },
+        { key: "alertStatus", label: "Alert Status" },
+        { key: "targetStatus", label: "Target Status" },
     ]
 
     const data = [
-        { no: "1", name: "Budi", imsi: "1234567890", date: "2023-01-01", count: 5, status: "Active" },
-        { no: "2", name: "Siti", imsi: "0987654321", date: "2023-01-02", count: 3, status: "Inactive" },
-        { no: "3", name: "Siti", imsi: "0987654321", date: "2023-01-02", count: 3, status: "Inactive" },
+        { no: "1", name: "Budi", imsi: "1234567890", date: "2023-01-01", count: 5, targetStatus: "Active", alertStatus: "Active", },
+        { no: "2", name: "Siti", imsi: "0987654321", date: "2023-01-02", count: 3, targetStatus: "Inactive", alertStatus: "Inactive", },
+        { no: "3", name: "Siti", imsi: "0987654321", date: "2023-01-02", count: 3, targetStatus: "Inactive", alertStatus: "Inactive", },
     ]
 
     const handleAddTarget = (newTarget) => {
@@ -67,14 +70,43 @@ export default function ListTarget() {
         console.log("Target deleted:", targetToDelete)
     }
 
+    const handleImportTarget = async (formData, file) => {
+        try {
+            // Here you would typically send the file to your backend API
+            // Example:
+            // const response = await fetch('/api/targets/import', {
+            //     method: 'POST',
+            //     body: formData
+            // })
+            // const result = await response.json()
+
+            console.log("Importing file:", file.name)
+            console.log("FormData:", formData)
+
+            // For now, just log the file info
+            // You can add your API call here
+            alert(`File "${file.name}" imported successfully!`)
+        } catch (error) {
+            console.error("Import error:", error)
+            throw new Error("Failed to import file. Please try again.")
+        }
+    }
+
     return (
         <div className="flex flex-col w-full gap-4 font-sora min-h-[54vh] max-h-[54vh] overflow-auto">
             <div className='flex justify-between items-center'>
                 <h3 className="text-xl font-bold text-white/90">List Target</h3>
-                <ButtonAddNew onClick={() => {
-                    setSelectedTarget(null)
-                    setIsModalOpen(true)
-                }} />
+                <div className='flex flex-row gap-3'>
+                    <ButtonCustom onClick={() => {
+                        setSelectedTarget(null)
+                        setIsModalImportOpen(true)
+                    }} label={"Import"} />
+
+                    <ButtonCustom onClick={() => {
+                        setSelectedTarget(null)
+                        setIsModalAddOpen(true)
+                    }} label={"Add New"} />
+                </div>
             </div>
             <div>
                 <Table
@@ -82,18 +114,24 @@ export default function ListTarget() {
                     data={data}
                     onRowClick={(row) => {
                         setSelectedTarget(row)
-                        setIsModalOpen(true)
+                        setIsModalAddOpen(true)
                     }}
                 />
             </div>
 
             <AddTargetModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                isOpen={isModalAddOpen}
+                onClose={() => setIsModalAddOpen(false)}
                 onAdd={handleAddTarget}
                 onUpdate={handleUpdateTarget}
                 onDelete={handleDeleteTarget}
                 initialData={selectedTarget}
+            />
+
+            <ImportTargetModal
+                isOpen={isModalImportOpen}
+                onClose={() => setIsModalImportOpen(false)}
+                onImport={handleImportTarget}
             />
         </div>
     )

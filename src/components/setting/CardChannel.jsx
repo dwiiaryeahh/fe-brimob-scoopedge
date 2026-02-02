@@ -39,12 +39,17 @@ export default function CardChannel({ channel }) {
                             <Text className='opacity-70'>RX / TX</Text>
                             <Text>: {channel.rx} / {channel.tx}</Text>
                         </div>
-                        <div className='flex gap-1'>
-                            {channel.temp > 70
-                                ? <FaTemperatureHigh color='#D91313' />
-                                : <FaTemperatureLow color='#80FF00' />
-                            }
-                            <Text size='12px'>  {channel.temp}°C</Text>
+                        <div className='flex flex-col justify-between gap-1'>
+                            <div className='flex flex-row gap-2'>
+                                {channel.temp > 70
+                                    ? <FaTemperatureHigh color='#D91313' />
+                                    : <FaTemperatureLow color='#80FF00' />
+                                }
+                                <Text size='12px'>  {channel.temp}°C</Text>
+                            </div>
+                            <div className='border rounded-sm p-2 border-[#3F9861] w-12.5 h-10.25 flex items-center'>
+                                <img src={channel.img}/>
+                            </div>
                         </div>
                     </div>
                 </div>

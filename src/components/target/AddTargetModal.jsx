@@ -12,8 +12,12 @@ export default function AddTargetModal({ isOpen, onClose, onAdd, onUpdate, onDel
         description: ''
     })
 
+    const [alertStatus, setAlertStatus] = useState(true)
+    const [targetStatus, setTargetStatus] = useState(true)
+
     useEffect(() => {
         if (initialData && isOpen) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData({
                 name: initialData.name || '',
                 imsi: initialData.imsi || '',
@@ -21,10 +25,12 @@ export default function AddTargetModal({ isOpen, onClose, onAdd, onUpdate, onDel
                 description: initialData.description || ''
             })
             // eslint-disable-next-line react-hooks/immutability
-            setIsActive(initialData.active ?? true)
+            setAlertStatus(initialData.alertStatus == 'Active' ? true : false)
+            setTargetStatus(initialData.targetStatus == 'Active' ? true : false)
         } else if (!isOpen) {
             setFormData({ name: '', imsi: '', msisdn: '', description: '' })
-            setIsActive(true)
+            setAlertStatus(true)
+            setTargetStatus(true)
         }
     }, [initialData, isOpen])
 
@@ -39,16 +45,14 @@ export default function AddTargetModal({ isOpen, onClose, onAdd, onUpdate, onDel
     const handleSubmit = (e) => {
         e.preventDefault()
         if (initialData) {
-            onUpdate?.({ ...initialData, ...formData })
+            onUpdate?.({ ...initialData, ...formData, alertStatus, targetStatus })
         } else {
-            onAdd?.(formData)
+            onAdd?.({ ...formData, alertStatus, targetStatus })
         }
         onClose()
     }
 
     const isUpdate = !!initialData
-    const [isActive, setIsActive] = useState(true)
-
 
     return (
         <Modal
@@ -57,7 +61,7 @@ export default function AddTargetModal({ isOpen, onClose, onAdd, onUpdate, onDel
             title={isUpdate ? "Update Target" : "Add Target"}
             width="max-w-lg"
         >
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <Input
                     label="Name"
                     placeholder="Type Name"
@@ -71,14 +75,22 @@ export default function AddTargetModal({ isOpen, onClose, onAdd, onUpdate, onDel
                     value={formData.imsi}
                     onChange={(val) => handleChange('imsi', val)}
                 />
+                <div className='flex flex-row gap-5'>
+                    <Toggle
+                        value={targetStatus}
+                        status={targetStatus ? 'active' : 'deactive'}
+                        onChange={setTargetStatus}
+                        label={"Target Status"}
+                    />
+                    <Toggle
+                        value={alertStatus}
+                        status={alertStatus ? 'active' : 'deactive'}
+                        onChange={setAlertStatus}
+                        label={"Alert Status"}
+                    />
+                </div>
 
-                <Toggle
-                    value={isActive}
-                    status={isActive ? 'active' : 'deactive'}
-                    onChange={setIsActive}
-                />
-
-                <div className="flex justify-center text-center gap-3 mb-5  w-full">
+                <div className="flex justify-center text-center gap-3 my-5 w-full">
                     {isUpdate && (
                         <Button
                             className="w-full bg-[#8E0B0B] flex items-center justify-center"
@@ -93,8 +105,6 @@ export default function AddTargetModal({ isOpen, onClose, onAdd, onUpdate, onDel
                             </Text>
                         </Button>
                     )}
-
-
 
                     <Button
                         className="w-full flex items-center justify-center"
