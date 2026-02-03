@@ -141,7 +141,7 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
                 {/* Upload Area */}
                 <div className='flex flex-col gap-2'>
                     <Text>
-                        Please input using this template: <span className='border-b border-b-[#0B8E39] text-[#0B8E39] cursor-pointer'>Template.xls</span>
+                        Please input using this template: <a href="/sample-data.xlsx" download="Template.xlsx" className='border-b border-b-[#0B8E39] text-[#0B8E39] cursor-pointer'>Template.xlsx</a>
                     </Text>
                     <Text>Then upload document with the data here:</Text>
                 </div>
