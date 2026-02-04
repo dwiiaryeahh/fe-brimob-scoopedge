@@ -1,34 +1,24 @@
 import Table from '../table/Table'
 import Button from '../Button';
+import { columnsCampaign } from '../table/columns/columnsCampaign';
 export default function ListCampaign() {
 
-    const columns = [
-        { key: "no", label: "No" },
-        { key: "imsi", label: "Imsi" },
-        { key: "date", label: "Time" },
-        { key: "channel", label: "Channel" },
-        { key: "count", label: "Count" },
-        { key: "provider", label: "Provider" },
-        { key: "target", label: "Target" },
-        {
-            key: "action",
-            label: "Action",
-            align: "center",
-            render: (row) => (
-                <Button
-                    className='bg-[#0C8736]'
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        alert(`Action for ${row.imsi}`);
-                    }}>
-                    Target
-                </Button>
-            )
-        },
-    ]
+    const columns = columnsCampaign({
+        handleTargetAction: (row) => alert(`Action for ${row.imsi}`)
+    });
 
     const data = [
         { no: "1", imsi: "1234567890", date: "2023-01-01 (17:00:00)", channel: 5, count: 5, provider: "Telkomsel", target: "1234567890" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
+        { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
         { no: "2", imsi: "0987654321", date: "2023-01-02 (18:00:00)", channel: 3, count: 3, provider: "Indosat", target: "0987654321" },
     ]
 

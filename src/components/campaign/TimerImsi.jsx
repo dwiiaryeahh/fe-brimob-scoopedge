@@ -13,7 +13,7 @@ export default function TimerImsi() {
                 </div>
                 <div className='flex flex-col items-center'>
                     <span className='font-oxanium'>Imsi Captured</span>
-                    <span className='text-3xl font-chakra'>10000</span>
+                    <span className='text-3xl font-chakra font-extrabold'>10000</span>
                 </div>
             </div>
         </BaseCard>

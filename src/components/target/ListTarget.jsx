@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import { BoxAllSide } from '../BaseBox'
-import Table from '../table/Table'
-import AddTargetModal from './AddTargetModal'
-import ImportTargetModal from './ImportTargetModal'
-import Button from '../Button'
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { BoxAllSide } from '../BaseBox';
+import Table from '../table/Table';
+import AddTargetModal from './AddTargetModal';
+import ImportTargetModal from './ImportTargetModal';
+import { formatDateTime } from '../../utils/formatDateTime';
+import { useTargetApi } from '../../hooks/useTargetApi';
+import { columnsTarget } from '../table/columns/columnsTarget';
 
 const ButtonCustom = ({ onClick, label }) => {
     return (
@@ -20,77 +22,97 @@ const ButtonCustom = ({ onClick, label }) => {
                 {label}
             </span>
         </BoxAllSide>
-    )
-}
+    );
+};
 
 export default function ListTarget() {
-    const [isModalAddOpen, setIsModalAddOpen] = useState(false)
-    const [isModalImportOpen, setIsModalImportOpen] = useState(false)
-    const [selectedTarget, setSelectedTarget] = useState(null)
-    console.log('selectedTarget', selectedTarget)
+    const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [isModalImportOpen, setIsModalImportOpen] = useState(false);
+    const [selectedTarget, setSelectedTarget] = useState(null);
 
-    const columns = [
-        { key: "no", label: "No" },
-        {
-            key: "name", label: "Name",
-            render: (row) => (
-                <span
-                    className="cursor-pointer underline hover:brightness-125 transition-all text-[#2AF170]"
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        setSelectedTarget(row)
-                        setIsModalAddOpen(true)
-                    }}
-                >
-                    {row.name}
-                </span>
-            )
-        },
-        { key: "imsi", label: "Imsi" },
-        { key: "date", label: "Last Update" },
-        { key: "alertStatus", label: "Alert Status" },
-        { key: "targetStatus", label: "Target Status" },
-    ]
+    const {
+        loading,
+        error,
+        targets,
+        getTargets,
+        createTarget,
+        updateTarget,
+        deleteTarget,
+        importTargets,
+        clearError,
+    } = useTargetApi();
 
-    const data = [
-        { no: "1", name: "Budi", imsi: "1234567890", date: "2023-01-01", count: 5, targetStatus: "Active", alertStatus: "Active", },
-        { no: "2", name: "Siti", imsi: "0987654321", date: "2023-01-02", count: 3, targetStatus: "Inactive", alertStatus: "Inactive", },
-        { no: "3", name: "Siti", imsi: "0987654321", date: "2023-01-02", count: 3, targetStatus: "Inactive", alertStatus: "Inactive", },
-    ]
+    // 1. Memoize fungsi loadTargets agar stabil
+    const loadTargets = useCallback(async () => {
+        try {
+            await getTargets();
+        } catch (err) {
+            console.error('Failed to load targets:', err);
+        }
+    }, [getTargets]);
 
-    const handleAddTarget = (newTarget) => {
-        console.log("New Target added:", newTarget)
-    }
+    useEffect(() => {
+        loadTargets();
+    }, [loadTargets]);
 
-    const handleUpdateTarget = (updatedTarget) => {
-        console.log("Target updated:", updatedTarget)
-    }
+    // 2. Gunakan useMemo untuk transformasi data tabel
+    // Ini akan berjalan otomatis setiap kali 'targets' dari API berubah
+    const tableData = useMemo(() => {
+        if (!targets) return [];
+        
+        return targets.map((target, index) => ({
+            no: (index + 1).toString(),
+            id: target.id,
+            name: target.name,
+            imsi: target.imsi,
+            date: formatDateTime(target.updated_at),
+            alert_status: target.alert_status,
+            target_status: target.target_status,
+        }));
+    }, [targets]);
 
-    const handleDeleteTarget = (targetToDelete) => {
-        console.log("Target deleted:", targetToDelete)
-    }
+    // 3. Gunakan useMemo untuk konfigurasi kolom
+    const columns = useMemo(() => {
+        return columnsTarget({ setSelectedTarget, setIsModalAddOpen });
+    }, []);
+
+    // Handlers
+    const handleAddTarget = async (newTarget) => {
+        try {
+            await createTarget(newTarget);
+            loadTargets();
+        } catch (err) {
+            console.error("Failed to create target:", err);
+        }
+    };
+
+    const handleUpdateTarget = async (updatedTarget) => {
+        try {
+            await updateTarget(updatedTarget.id, updatedTarget);
+            loadTargets();
+        } catch (err) {
+            console.error("Failed to update target:", err);
+        }
+    };
+
+    const handleDeleteTarget = async (targetToDelete) => {
+        try {
+            await deleteTarget(targetToDelete.id);
+            loadTargets();
+        } catch (err) {
+            console.error("Failed to delete target:", err);
+        }
+    };
 
     const handleImportTarget = async (formData, file) => {
         try {
-            // Here you would typically send the file to your backend API
-            // Example:
-            // const response = await fetch('/api/targets/import', {
-            //     method: 'POST',
-            //     body: formData
-            // })
-            // const result = await response.json()
-
-            console.log("Importing file:", file.name)
-            console.log("FormData:", formData)
-
-            // For now, just log the file info
-            // You can add your API call here
-            alert(`File "${file.name}" imported successfully!`)
-        } catch (error) {
-            console.error("Import error:", error)
-            throw new Error("Failed to import file. Please try again.")
+            await importTargets(file);
+            loadTargets();
+        } catch (err) {
+            console.error("Import error:", err);
+            throw new Error("Gagal mengimport file.");
         }
-    }
+    };
 
     return (
         <div className="flex flex-col w-full gap-4 font-sora min-h-[54vh] max-h-[54vh] overflow-auto">
@@ -98,23 +120,32 @@ export default function ListTarget() {
                 <h3 className="text-xl font-bold text-white/90">List Target</h3>
                 <div className='flex flex-row gap-3'>
                     <ButtonCustom onClick={() => {
-                        setSelectedTarget(null)
-                        setIsModalImportOpen(true)
+                        setSelectedTarget(null);
+                        setIsModalImportOpen(true);
                     }} label={"Import"} />
 
                     <ButtonCustom onClick={() => {
-                        setSelectedTarget(null)
-                        setIsModalAddOpen(true)
+                        setSelectedTarget(null);
+                        setIsModalAddOpen(true);
                     }} label={"Add New"} />
                 </div>
             </div>
+
+            {error && (
+                <div className="bg-[#8E0B0B]/20 border border-[#8E0B0B] rounded-lg p-3">
+                    <p className="text-[#FF6B6B] text-sm">{error}</p>
+                    <button onClick={clearError} className="text-white/60 text-xs underline mt-1">Dismiss</button>
+                </div>
+            )}
+
             <div>
                 <Table
                     columns={columns}
-                    data={data}
+                    data={tableData}
+                    loading={loading}
                     onRowClick={(row) => {
-                        setSelectedTarget(row)
-                        setIsModalAddOpen(true)
+                        setSelectedTarget(row);
+                        setIsModalAddOpen(true);
                     }}
                 />
             </div>
@@ -134,5 +165,5 @@ export default function ListTarget() {
                 onImport={handleImportTarget}
             />
         </div>
-    )
+    );
 }

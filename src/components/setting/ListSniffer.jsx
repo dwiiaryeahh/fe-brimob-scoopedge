@@ -1,15 +1,10 @@
 import React from 'react'
 import { BoxAllSide } from '../BaseBox'
 import Table from '../table/Table'
+import { columnsSniffer } from '../table/columns/columnsSniffer'
 
 export default function ListSniffer() {
-    const columns = [
-        { key: "no", label: "No" },
-        { key: "task", label: "Taks Name" },
-        { key: "start_task", label: "Start Task" },
-        { key: "stop_task", label: "Stop Task" },
-        { key: "imsi", label: "Imsi" },
-    ]
+    const columns = columnsSniffer();
 
     const data = [
         { no: "1", task: "Task 1", imsi: "1234567890", start_task: "2023-01-01 (17:00:00)", stop_task: "2023-01-01 (17:00:00)", },
