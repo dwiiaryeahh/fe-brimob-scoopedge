@@ -45,7 +45,9 @@ export default function ReportDetailModal({ title, isOpen, onClose, reportId }) 
         const query = searchQuery.toLowerCase()
         return crawlings.filter(item =>
             (item.imsi && item.imsi.toLowerCase().includes(query)) ||
-            (item.provider && item.provider.toLowerCase().includes(query))
+            (item.alert_name && item.alert_name.toLowerCase().includes(query)) ||
+            (item.alert_status && item.alert_status.toLowerCase().includes(query)) || 
+            (item.alert_status && item.alert_status.toLowerCase().includes(query))
         )
     }, [reportDetail, searchQuery])
 
@@ -154,7 +156,7 @@ export default function ReportDetailModal({ title, isOpen, onClose, reportId }) 
                                         className="rounded-sm bg-linear-to-t from-[#043516] to-[#0F5028] w-full"
                                         placeholder="Search by IMSI or provider..."
                                         value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onChange={(value) => setSearchQuery(value)}
                                     />
                                 </div>
                                 <div className='inline-flex gap-5'>

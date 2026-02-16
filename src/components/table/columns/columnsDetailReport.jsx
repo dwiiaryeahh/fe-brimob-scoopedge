@@ -1,10 +1,6 @@
 import React from 'react';
 import { formatDateTime } from '../../../utils/formatDateTime';
 
-/**
- * Column definition for the Detail Report table
- * @returns {Array} List of column definitions
- */
 export const columnsDetailReport = () => [
     { key: "no", label: "No" },
     {
@@ -13,4 +9,7 @@ export const columnsDetailReport = () => [
             formatDateTime(row.timestamp)
     },
     { key: "imsi", label: "IMSI" },
+    { key: "count", label: "Count" },
+    { key: "alert_status", label: "Alert Status" },
+    { key: "alert_name", label: "Alert Name" },
 ];

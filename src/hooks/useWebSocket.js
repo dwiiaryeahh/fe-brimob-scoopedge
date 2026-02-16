@@ -1,13 +1,5 @@
-/**
- * useWebSocket Hook
- * Reusable WebSocket hook with automatic connection management and reconnection
- */
-
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-/**
- * WebSocket connection states
- */
 export const WS_STATES = {
     CONNECTING: 'CONNECTING',
     CONNECTED: 'CONNECTED',
@@ -15,19 +7,6 @@ export const WS_STATES = {
     ERROR: 'ERROR',
 };
 
-/**
- * Custom hook for WebSocket connections
- * @param {string} url - WebSocket URL
- * @param {Object} options - Configuration options
- * @param {boolean} options.autoConnect - Auto-connect on mount (default: true)
- * @param {number} options.reconnectInterval - Reconnect interval in ms (default: 3000)
- * @param {number} options.maxReconnectAttempts - Max reconnection attempts (default: 5)
- * @param {Function} options.onMessage - Message handler callback
- * @param {Function} options.onOpen - Connection open callback
- * @param {Function} options.onClose - Connection close callback
- * @param {Function} options.onError - Error callback
- * @returns {Object} WebSocket state and methods
- */
 export const useWebSocket = (url, options = {}) => {
     const {
         autoConnect = true,
@@ -47,9 +26,6 @@ export const useWebSocket = (url, options = {}) => {
     const reconnectTimeoutRef = useRef(null);
     const shouldReconnectRef = useRef(true);
 
-    /**
-     * Connect to WebSocket
-     */
     const connect = useCallback(() => {
         if (!url) {
             console.error('WebSocket URL is required');
@@ -104,9 +80,8 @@ export const useWebSocket = (url, options = {}) => {
                     onClose(event);
                 }
 
-                // Attempt reconnection
                 if (shouldReconnectRef.current && reconnectCount < maxReconnectAttempts) {
-                    const delay = reconnectInterval * Math.pow(1.5, reconnectCount); // Exponential backoff
+                    const delay = reconnectInterval * Math.pow(1.5, reconnectCount);
                     console.log(`Reconnecting in ${delay}ms... (attempt ${reconnectCount + 1}/${maxReconnectAttempts})`);
 
                     reconnectTimeoutRef.current = setTimeout(() => {
@@ -139,9 +114,6 @@ export const useWebSocket = (url, options = {}) => {
         }
     }, [url, reconnectInterval, maxReconnectAttempts, reconnectCount, onMessage, onOpen, onClose, onError]);
 
-    /**
-     * Disconnect from WebSocket
-     */
     const disconnect = useCallback(() => {
         shouldReconnectRef.current = false;
 
@@ -159,10 +131,6 @@ export const useWebSocket = (url, options = {}) => {
         setReconnectCount(0);
     }, []);
 
-    /**
-     * Send message through WebSocket
-     * @param {any} data - Data to send (will be JSON stringified if object)
-     */
     const sendMessage = useCallback((data) => {
         if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
             console.error('WebSocket is not connected');
@@ -179,9 +147,6 @@ export const useWebSocket = (url, options = {}) => {
         }
     }, []);
 
-    /**
-     * Reconnect to WebSocket
-     */
     const reconnect = useCallback(() => {
         disconnect();
         shouldReconnectRef.current = true;
@@ -189,14 +154,12 @@ export const useWebSocket = (url, options = {}) => {
         connect();
     }, [connect, disconnect]);
 
-    // Auto-connect on mount
     useEffect(() => {
         if (autoConnect) {
             shouldReconnectRef.current = true;
             connect();
         }
 
-        // Cleanup on unmount
         return () => {
             shouldReconnectRef.current = false;
 
@@ -211,14 +174,12 @@ export const useWebSocket = (url, options = {}) => {
     }, [autoConnect, connect]);
 
     return {
-        // State
         connectionState,
         lastMessage,
         reconnectCount,
         isConnected: connectionState === WS_STATES.CONNECTED,
         isConnecting: connectionState === WS_STATES.CONNECTING,
 
-        // Methods
         connect,
         disconnect,
         sendMessage,

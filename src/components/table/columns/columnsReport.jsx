@@ -3,10 +3,25 @@ import { FaSearch } from "react-icons/fa";
 import { formatDateTime } from "../../../utils/formatDateTime";
 import Button from "../../Button";
 
-export const columnsReport = ({handleOpenDetail}) => [
+export const columnsReport = ({ handleOpenDetail }) => [
     { key: "no", label: "No" },
     { key: "name", label: "Campaign Name" },
-    { key: "imsi", label: "Target IMSI" },
+    {
+        key: "imsi",
+        label: "Target IMSI",
+        render: (row) => {
+            if (!row.imsi) return "-";
+            const imsis = row.imsi.split(/[\s,]+/);
+            if (imsis.length > 1) {
+                return (
+                    <span title={row.imsi} className="cursor-help">
+                        {imsis[0]}, ...
+                    </span>
+                );
+            }
+            return row.imsi;
+        }
+    },
     { key: "mode", label: "Mode" },
     {
         key: "duration",
@@ -20,7 +35,6 @@ export const columnsReport = ({handleOpenDetail}) => [
 
             if (diffMs < 0) return "00:00:00";
 
-            // Hitung total detik, lalu pecah ke jam, menit, detik
             let totalSeconds = Math.floor(diffMs / 1000);
 
             const hours = Math.floor(totalSeconds / 3600);
@@ -29,7 +43,6 @@ export const columnsReport = ({handleOpenDetail}) => [
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
 
-            // Gunakan padStart untuk memastikan format 2 digit (misal: 1 -> 01)
             const displayHours = String(hours).padStart(2, '0');
             const displayMinutes = String(minutes).padStart(2, '0');
             const displaySeconds = String(seconds).padStart(2, '0');

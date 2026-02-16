@@ -39,8 +39,8 @@ export default function HeaderChannel({data}) {
                         <img src={iconDevice} alt="" />
                         <p>RX TX Setting</p>
                     </div>
-                    <div className='flex flex-row gap-2 cursor-pointer'>
-                        <img onClick={()=> navigate('/setting/channel')} src={iconDevice} alt="" />
+                    <div onClick={()=> navigate('/setting/channel')} className='flex flex-row gap-2 cursor-pointer'>
+                        <img src={iconDevice} alt="" />
                         <p>Device Status</p>
                     </div>
                 </div>

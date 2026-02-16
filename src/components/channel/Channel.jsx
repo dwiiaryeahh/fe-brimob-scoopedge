@@ -3,7 +3,7 @@ import { useState } from "react";
 export const Channel = ({
     channel = "CH 02",
     value = "75°",
-    status = "active", // "active" | "running" | "deactive"
+    status = "active",
     onClickOff = () => console.log("OFF clicked"),
     onClickOn = () => console.log("ON clicked")
 }) => {
@@ -19,7 +19,6 @@ export const Channel = ({
         onClickOn();
     };
 
-    // Define border colors based on status
     const getBorderColor = () => {
         switch (status) {
             case "active":
@@ -59,7 +58,7 @@ export const Channel = ({
                 >
                     <div
                         className="flex items-center justify-between px-3 py-2 border-b"
-                        style={{ borderColor: `${borderColor}66` }}
+                        style={{ borderColor: `${borderColor}` }}
                     >
                         <div className="text-white text-xs font-bold tracking-wider">{channel}</div>
                         <div className="text-white text-xs font-bold">{value}</div>
@@ -72,7 +71,7 @@ export const Channel = ({
                                 ? 'text-white bg-slate-800'
                                 : 'text-slate-600 bg-slate-900 hover:text-slate-400'
                                 }`}
-                            style={{ borderColor: `${borderColor}66` }}
+                            style={{ borderColor: `${borderColor}` }}
                         >
                             OFF
                         </button>

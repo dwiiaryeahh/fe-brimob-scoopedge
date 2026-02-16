@@ -148,14 +148,12 @@ function getPathByType(w, h, c, type, extra = {}) {
       const A_y = o
 
       const L_x = A_x + SW // awal slope
-      // eslint-disable-next-line no-unused-vars
       const L_y = A_y
 
       const P_x = L_x + SH // ujung slope turun
       const P_y = A_y + SH
 
       const Q_x = w - c - o // awal chamfer kanan atas (di plateau SH)
-      // eslint-disable-next-line no-unused-vars
       const Q_y = P_y
 
       const C_x = w - o // ujung chamfer kanan atas

@@ -20,18 +20,15 @@ export default function ListReport({ filterMode }) {
         getReports(filterMode)
     }, [filterMode, getReports])
 
-    // 1. Gunakan useCallback agar fungsi ini stabil (tidak berubah tiap render)
     const handleOpenDetail = useCallback((row) => {
         setSelectedReport(row)
         setIsModalOpen(true)
     }, [])
 
-    // 2. WAJIB: Gunakan useMemo untuk columns agar Table tidak re-render terus menerus
     const columns = useMemo(() => 
         columnsReport({ handleOpenDetail }), 
     [handleOpenDetail])
 
-    // 3. Transformasi data sudah benar menggunakan useMemo
     const filteredData = useMemo(() => {
         if (!reports) return []
 

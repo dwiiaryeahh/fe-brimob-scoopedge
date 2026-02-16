@@ -25,21 +25,29 @@ export default function CardChannel({ channel }) {
                             </Text>
                         </div>
                     </div>
-                    <div className='flex flex-row gap-3 justify-between'>
-                        <div className='grid grid-cols-[50px_1fr] gap-y-1 text-left'>
-                            <Text className='opacity-70'>TYPE</Text>
-                            <Text>: {channel.mode}</Text>
+                    <div className='flex flex-row gap-3 justify-between flex-nowrap'>
+                        <div className='gap-1 flex flex-col'>
+                            <div className='grid grid-cols-[42px_1fr] gap-y-1 text-left'>
+                                <Text className='opacity-70'>TYPE</Text>
+                                <Text className='text-nowrap'>: {channel.mode}</Text>
 
-                            <Text className='opacity-70'>ARFCN</Text>
-                            <Text>: {channel.arfcn}</Text>
+                                <Text className='opacity-70'>ARFCN</Text>
+                                <Text>: {channel.arfcn}</Text>
 
-                            <Text className='opacity-70'>BAND</Text>
-                            <Text>: {channel.band}</Text>
+                                <Text className='opacity-70'>BAND</Text>
+                                <Text>: {channel.band}</Text>
 
-                            <Text className='opacity-70'>RX / TX</Text>
-                            <Text>: {channel.rx} / {channel.tx}</Text>
+                            </div>
+                            <div className='grid grid-cols-[20px_1fr] gap-y-1 text-left'>
+                                <Text className='opacity-70'>UL</Text>
+                                <Text className='text-nowrap'>: {channel.ul}</Text>
+
+                                <Text className='opacity-70'>DL</Text>
+                                <Text className='text-nowrap'>: {channel.dl}</Text>
+                            </div>
                         </div>
-                        <div className='flex flex-col justify-between gap-1'>
+
+                        <div className='flex flex-col justify-around items-end gap-1'>
                             <div className='flex flex-row gap-2'>
                                 {channel.temp > 70
                                     ? <FaTemperatureHigh color='#D91313' />
@@ -47,8 +55,25 @@ export default function CardChannel({ channel }) {
                                 }
                                 <Text size='12px'>  {channel.temp}°C</Text>
                             </div>
-                            <div className='border rounded-sm p-2 border-[#3F9861] w-12.5 h-10.25 flex items-center'>
-                                <img src={channel.img}/>
+                            <div>
+
+                                {channel.img === '-' ? (
+                                    <Text size='16px'>-</Text>
+                                ) : Array.isArray(channel.img) ? (
+                                    <div className='flex flex-row w-full gap-1'>
+                                        {
+                                            channel.img.map((src, i) => (
+                                                <div className='border rounded-sm p-1 border-[#3F9861] w-10 h-10.25 flex flex-row items-center justify-center gap-1 overflow-hidden'>
+                                                    <img key={i} src={src} alt="provider" className='h-full object-contain w-full' />
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                ) : (
+                                    <div className='border rounded-sm p-1 border-[#3F9861] w-12.5 h-10.25 flex flex-row items-center justify-center gap-1 overflow-hidden'>
+                                        <img src={channel.img} alt="provider" className='w-full h-full object-contain' />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

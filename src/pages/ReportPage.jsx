@@ -9,7 +9,7 @@ export default function ReportPage() {
         { value: "whitelist", label: "Whitelist", content: <div>Isi History</div> },
         { value: "blacklist", label: "Blacklist", content: <div>Isi History</div> },
     ]
-    const [filterMode, setFilterMode] = useState('')
+    const [filterMode, setFilterMode] = useState('all')
     return (
         <div className="flex flex-col p-5 gap-5">
             <GroupChannel />

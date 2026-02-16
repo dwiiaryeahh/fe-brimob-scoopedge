@@ -1,35 +1,84 @@
+import { useMemo } from 'react';
 import { Channel } from './Channel'
 import cutLeft from '../../assets/cut_left.svg'
 import cutRight from '../../assets/cut_right.svg'
 import HeaderChannel from './HeaderChannel';
+import useHeartbeatWebSocket from '../../hooks/useHeartbeatWebSocket';
 
 export default function GroupChannel() {
-    const channels = [
-        { id: 1, channel: "CH 01", value: "75°", status: "active" },
-        { id: 2, channel: "CH 02", value: "80°", status: "running" },
-        { id: 3, channel: "CH 03", value: "65°", status: "deactive" },
-        { id: 4, channel: "CH 04", value: "70°", status: "active" },
-        { id: 5, channel: "CH 05", value: "85°", status: "running" },
-        { id: 6, channel: "CH 06", value: "60°", status: "deactive" },
-        { id: 7, channel: "CH 07", value: "78°", status: "active" },
-        { id: 8, channel: "CH 08", value: "82°", status: "running" },
-        { id: 9, channel: "CH 09", value: "68°", status: "deactive" },
-        { id: 10, channel: "CH 10", value: "73°", status: "active" },
-        { id: 11, channel: "CH 11", value: "79°", status: "running" },
-        { id: 12, channel: "CH 12", value: "66°", status: "deactive" },
-        { id: 13, channel: "CH 13", value: "76°", status: "active" },
-        { id: 14, channel: "CH 14", value: "81°", status: "running" },
-        { id: 15, channel: "CH 15", value: "64°", status: "deactive" },
-        { id: 16, channel: "CH 16", value: "77°", status: "active" },
-        { id: 17, channel: "CH 17", value: "83°", status: "running" },
-        { id: 18, channel: "CH 18", value: "67°", status: "deactive" },
-        { id: 19, channel: "CH 19", value: "74°", status: "active" },
-        { id: 20, channel: "CH 20", value: "86°", status: "running" },
-        { id: 21, channel: "CH 21", value: "62°", status: "deactive" },
-        { id: 22, channel: "CH 22", value: "71°", status: "active" },
-        { id: 23, channel: "CH 23", value: "84°", status: "running" },
-        { id: 24, channel: "CH 24", value: "69°", status: "deactive" },
+    const { channelsData } = useHeartbeatWebSocket();
+
+    const staticChannels = [
+        { id: 1, channel: "CH 01", value: "-", status: "active" },
+        { id: 2, channel: "CH 02", value: "-", status: "active" },
+        { id: 3, channel: "CH 03", value: "-", status: "active" },
+        { id: 4, channel: "CH 04", value: "-", status: "active" },
+        { id: 5, channel: "CH 05", value: "-", status: "active" },
+        { id: 6, channel: "CH 06", value: "-", status: "active" },
+        { id: 7, channel: "CH 07", value: "-", status: "active" },
+        { id: 8, channel: "CH 08", value: "-", status: "active" },
+        { id: 9, channel: "CH 09", value: "-", status: "active" },
+        { id: 10, channel: "CH 10", value: "-", status: "active" },
+        { id: 11, channel: "CH 11", value: "-", status: "active" },
+        { id: 12, channel: "CH 12", value: "-", status: "active" },
+        { id: 13, channel: "CH 13", value: "-", status: "active" },
+        { id: 14, channel: "CH 14", value: "-", status: "active" },
+        { id: 15, channel: "CH 15", value: "-", status: "active" },
+        { id: 16, channel: "CH 16", value: "-", status: "active" },
+        { id: 17, channel: "CH 17", value: "-", status: "active" },
+        { id: 18, channel: "CH 18", value: "-", status: "active" },
+        { id: 19, channel: "CH 19", value: "-", status: "active" },
+        { id: 20, channel: "CH 20", value: "-", status: "active" },
+        { id: 21, channel: "CH 21", value: "-", status: "active" },
+        { id: 22, channel: "CH 22", value: "-", status: "active" },
+        { id: 23, channel: "CH 23", value: "-", status: "active" },
+        { id: 24, channel: "CH 24", value: "-", status: "active" },
     ];
+
+    const channels = useMemo(() => {
+        return staticChannels.map(staticChannel => {
+            const chNum = staticChannel.channel.replace('CH ', '').padStart(2, '0');
+            const wsData = channelsData[chNum];
+
+            if (wsData) {
+                let status = staticChannel.status;
+                if (wsData.state === 'OFFLINE') {
+                    status = 'deactive';
+                } else if (wsData.state === 'ONLINE') {
+                    status = 'active'
+                } else {
+                    status = 'running'
+                }
+
+                return {
+                    ...staticChannel,
+                    value: wsData.temp && wsData.temp !== '-' ? `${wsData.temp}°` : staticChannel.value,
+                    status: status,
+                };
+            }
+
+            return staticChannel;
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [channelsData]);
+
+    const data = useMemo(() => {
+        const stats = channels.reduce((acc, channel) => {
+            if (channel.status === 'active') {
+                acc.active++;
+            } else if (channel.status === 'running') {
+                acc.running++;
+            } else if (channel.status === 'deactive') {
+                acc.deactive++;
+            }
+            return acc;
+        }, { active: 0, running: 0, deactive: 0 });
+
+        return {
+            ...stats,
+            count: channels.length
+        };
+    }, [channels]);
 
     const handleOff = (channelId) => {
         console.log(`${channelId} OFF`);
@@ -38,13 +87,6 @@ export default function GroupChannel() {
     const handleOn = (channelId) => {
         console.log(`${channelId} ON`);
     };
-
-    const data = {
-        "active": 16,
-        "running": 4,
-        "deactive": 4,
-        "count": 24
-    }
 
     return (
         <>

@@ -42,7 +42,6 @@ export default function ListTarget() {
         clearError,
     } = useTargetApi();
 
-    // 1. Memoize fungsi loadTargets agar stabil
     const loadTargets = useCallback(async () => {
         try {
             await getTargets();
@@ -55,8 +54,6 @@ export default function ListTarget() {
         loadTargets();
     }, [loadTargets]);
 
-    // 2. Gunakan useMemo untuk transformasi data tabel
-    // Ini akan berjalan otomatis setiap kali 'targets' dari API berubah
     const tableData = useMemo(() => {
         if (!targets) return [];
         
@@ -71,12 +68,10 @@ export default function ListTarget() {
         }));
     }, [targets]);
 
-    // 3. Gunakan useMemo untuk konfigurasi kolom
     const columns = useMemo(() => {
         return columnsTarget({ setSelectedTarget, setIsModalAddOpen });
     }, []);
 
-    // Handlers
     const handleAddTarget = async (newTarget) => {
         try {
             await createTarget(newTarget);

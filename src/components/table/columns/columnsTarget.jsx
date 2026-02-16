@@ -1,12 +1,3 @@
-import React from 'react';
-
-/**
- * Column definition for the Target table
- * @param {Object} params - Parameters for the columns
- * @param {Function} params.setSelectedTarget - Handler to set the selected target
- * @param {Function} params.setIsModalAddOpen - Handler to open the add/edit modal
- * @returns {Array} List of column definitions
- */
 export const columnsTarget = ({ setSelectedTarget, setIsModalAddOpen }) => [
     { key: "no", label: "No" },
     {

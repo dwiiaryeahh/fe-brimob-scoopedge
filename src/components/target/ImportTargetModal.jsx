@@ -10,7 +10,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
     const [error, setError] = useState('')
     const fileInputRef = useRef(null)
 
-    // Reset state when modal closes
     const handleClose = () => {
         setSelectedFile(null)
         setError('')
@@ -18,7 +17,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
         onClose()
     }
 
-    // Validate file type
     const validateFile = (file) => {
         const validTypes = [
             'application/vnd.ms-excel',
@@ -34,7 +32,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
             return false
         }
 
-        // Check file size (max 10MB)
         if (file.size > 10 * 1024 * 1024) {
             setError('File size must be less than 10MB')
             return false
@@ -44,14 +41,12 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
         return true
     }
 
-    // Handle file selection
     const handleFileSelect = (file) => {
         if (validateFile(file)) {
             setSelectedFile(file)
         }
     }
 
-    // Handle file input change
     const handleFileChange = (e) => {
         const file = e.target.files?.[0]
         if (file) {
@@ -59,7 +54,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
         }
     }
 
-    // Handle drag events
     const handleDragEnter = (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -88,7 +82,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
         }
     }
 
-    // Handle import
     const handleImport = async () => {
         if (!selectedFile) {
             setError('Please select a file to import')
@@ -96,23 +89,19 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
         }
 
         try {
-            // Create FormData for file upload
             const formData = new FormData()
             formData.append('file', selectedFile)
 
-            // Call the onImport callback with the file
             if (onImport) {
                 await onImport(formData, selectedFile)
             }
 
-            // Close modal on success
             handleClose()
         } catch (err) {
             setError(err.message || 'Failed to import file')
         }
     }
 
-    // Remove selected file
     const handleRemoveFile = () => {
         setSelectedFile(null)
         setError('')
@@ -121,7 +110,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
         }
     }
 
-    // Format file size
     const formatFileSize = (bytes) => {
         if (bytes === 0) return '0 Bytes'
         const k = 1024
@@ -138,7 +126,6 @@ export default function ImportTargetModal({ isOpen, onClose, onImport }) {
             width="max-w-lg"
         >
             <div className="flex flex-col gap-2">
-                {/* Upload Area */}
                 <div className='flex flex-col gap-2'>
                     <Text>
                         Please input using this template: <a href="/sample-data.xlsx" download="Template.xlsx" className='border-b border-b-[#0B8E39] text-[#0B8E39] cursor-pointer'>Template.xlsx</a>
